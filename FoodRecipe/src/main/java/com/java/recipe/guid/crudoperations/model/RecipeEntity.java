@@ -3,40 +3,41 @@ package com.java.recipe.guid.crudoperations.model;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-	@Table(name="recipees")
+@Table(name="recipees")
+
+
 	public class RecipeEntity {
-		
-	
-	 private static final SimpleDateFormat df = new SimpleDateFormat( "h:mma" );
 	  
 		@Id
-		@GeneratedValue(strategy=GenerationType.AUTO)
-		private long id;
+		@GeneratedValue
+		private int id;
 		
 		@Column(name="recipe_Name")
 		private String recipeName;
 		
 		@Column(name="recipe_ingrediants")
+		
 		private String ingrediants;
 		
 		@Column(name="recipe_steps")
 		private String steps;
 		
-		//@Column
-		//private LocalDateTime dt;
-		
-		
-		
-		//private java.sql.Time time;
+		@OneToMany(targetEntity=RecipeIngrediants.class,cascade=CascadeType.ALL)
+		@JoinColumn(name="id",referencedColumnName ="id")
+		private List<RecipeIngrediants> recipeIngrediants;
 		
 		public RecipeEntity() {
 			super();
@@ -45,7 +46,7 @@ import javax.persistence.Table;
 		public long getId() {
 			return id;
 		}
-		public void setId(long id) {
+		public void setId(int id) {
 			this.id = id;
 		}
 		public String getRecipeName() {
@@ -67,7 +68,7 @@ import javax.persistence.Table;
 			this.steps = steps;
 		}
 		
-		public RecipeEntity(long id, String recipeName, String ingrediants, String steps) {
+		public RecipeEntity(int id, String recipeName, String ingrediants, String steps) {
 			super();
 			this.id = id;
 			this.recipeName = recipeName;
@@ -75,7 +76,6 @@ import javax.persistence.Table;
 			this.steps = steps;
 	
 		}
-		
 		
 	}
 

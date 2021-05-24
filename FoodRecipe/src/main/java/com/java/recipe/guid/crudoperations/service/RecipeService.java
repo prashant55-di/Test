@@ -17,14 +17,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.java.recipe.guid.crudoperations.exception.RecipeNotFoundException;
 import com.java.recipe.guid.crudoperations.model.RecipeEntity;
+import com.java.recipe.guid.crudoperations.model.RecipeIngrediants;
 import com.java.recipe.guid.crudoperations.repository.RecipeRepository;
 
 @Service
-@RequestMapping("/api/recp1")
+//@RequestMapping("/api/recp1")
 public class RecipeService {
 
-	@Autowired(required=true)
+	@Autowired
 	private RecipeRepository recipeRepository;
+	
+	@Autowired
+	private RecipeIngrediants recipeIngrediants;
 	
 	
 	public RecipeEntity createRecipe(RecipeEntity recipeEnity) {
@@ -36,13 +40,14 @@ public class RecipeService {
 		return recipeRepository.findAll();
 	}
 	
+
 	
-	public Object getById(long recipeid) throws RecipeNotFoundException {
+	public ResponseEntity<RecipeEntity> getById(int recipeid) throws RecipeNotFoundException {
 		RecipeEntity recipeEnity=recipeRepository.findById(recipeid).orElseThrow(()-> new RecipeNotFoundException("Recipe unavailable for this id ::" + recipeid) );
-		return ResponseEntity.ok().body(recipeEnity);
+		return new ResponseEntity<>(recipeEnity,HttpStatus.OK);
 	}
 	
-	public ResponseEntity<Void> deleteById(long recipeid) throws RecipeNotFoundException {
+	public ResponseEntity<Void> deleteById(int recipeid) throws RecipeNotFoundException {
 
 		recipeRepository.findById(recipeid).orElseThrow(()-> 
     	new RecipeNotFoundException("Recipe unavailable for this id ::" + recipeid) );
@@ -51,7 +56,11 @@ public class RecipeService {
     	return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	public ResponseEntity<RecipeEntity> updateRecipe(@PathVariable(value="id")long recipeid
+	public RecipeEntity updateRecipe(RecipeEntity recipeEnity) {
+		return recipeRepository.save(recipeEnity);
+	}
+	
+/*	public ResponseEntity<RecipeEntity> updateRecipe(@PathVariable(value="id")long recipeid
 			,@RequestBody RecipeEntity recipeEnityDetails) throws RecipeNotFoundException
 	{
 		RecipeEntity recipeEnity=recipeRepository.findById(recipeid).orElseThrow(()-> new RecipeNotFoundException("Recipe unavailable for this id ::" + recipeid) );
@@ -64,7 +73,7 @@ public class RecipeService {
 		recipeRepository.save(recipeEnity);
 		return ResponseEntity.ok().body(recipeEnity);
 	}
-
+*/
 
 }
 	
